@@ -1,0 +1,84 @@
+[
+{
+    "name": "Rosa",
+    "temperature": "36",
+    "state": "normal"
+},
+{
+    "name": "Rachel",
+    "temperature": "46",
+    "state": "Très anormal"
+},
+{
+    "name": "Maindy",
+    "temperature": "26",
+    "state": "normal"
+},
+{
+    "name": "Luderson",
+    "temperature": "39",
+    "state": "normal"
+},
+{
+    "name": "Sara",
+    "temperature": "76",
+    "state": "très normal"
+},
+{
+    "name": "Lorsen",
+    "temperature": "96",
+    "state": "très normal"
+}
+,
+{
+    "name": "Rachel",
+    "temperature": "46",
+    "state": "Très anormal"
+},
+{
+    "name": "Maindy",
+    "temperature": "26",
+    "state": "normal"
+},
+{
+    "name": "Luderson",
+    "temperature": "39",
+    "state": "normal"
+},
+{
+    "name": "Sara",
+    "temperature": "76",
+    "state": "très normal"
+},
+{
+    "name": "Lorsen",
+    "temperature": "96",
+    "state": "très normal"
+}
+,
+{
+    "name": "Rachel",
+    "temperature": "46",
+    "state": "Très anormal"
+},
+{
+    "name": "Maindy",
+    "temperature": "26",
+    "state": "normal"
+},
+{
+    "name": "Luderson",
+    "temperature": "39",
+    "state": "normal"
+},
+{
+    "name": "Sara",
+    "temperature": "76",
+    "state": "très normal"
+},
+{
+    "name": "Lorsen",
+    "temperature": "96",
+    "state": "très normal"
+}
+]
