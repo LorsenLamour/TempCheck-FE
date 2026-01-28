@@ -3,23 +3,30 @@ import React, { useState } from "react";
 import { router } from "expo-router";
 import { useContext } from "react";
 import { CurrentUserContext } from "../../context/CurrentUserContext";
-
+import TestData from "../../data/testUser.json";
 
 export default function Connexion() {
-    
-    const { user, setCurrentUser } = useContext(CurrentUserContext);
+
+    const { setCurrentUser } = useContext(CurrentUserContext);
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
 
-    const handleSubmit = (event) => {
-        Alert.alert("Connexion réussie !");
-        event.preventDefault();
-    }
-    /**
-     * Plus tard : Mettre en place une vraie connexion avec backend
-     */
+        const handleSubmit = () => {
+            const foundUser = TestData.find(user => user.email === email && user.password === password);
+
+            if (!foundUser) {
+                Alert.alert("Erreur de connexion", "Email ou mot de passe incorrect.");
+                return;
+            }
+            
+            setCurrentUser(foundUser);
+            router.replace("/(tabs)");
+        }
+        /**
+         * Plus tard : Mettre en place une vraie connexion avec backend
+         */
     return(
         <View style={styles.container}>
             <View>

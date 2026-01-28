@@ -7,7 +7,7 @@ export function CurrentUserProvider({ children }){
 
     const setCurrentUser = useCallback((newUser) => {
         setUser((newUser));
-    }, [user]);
+    }, []);
 
     const value = useMemo(() => ({ user, setCurrentUser }), [user, setCurrentUser]);
 
