@@ -1,8 +1,13 @@
-import { View, Text, StyleSheet, Alert, TextInput, TouchableOpacity, Pressable} from "react-native";
+import { View, Text, StyleSheet, Alert, TextInput, TouchableOpacity } from "react-native";
 import React, { useState } from "react";
 import { router } from "expo-router";
+import { useContext } from "react";
+import { CurrentUserContext } from "../../context/CurrentUserContext";
+
 
 export default function Connexion() {
+    
+    const { user, setCurrentUser } = useContext(CurrentUserContext);
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -12,6 +17,9 @@ export default function Connexion() {
         Alert.alert("Connexion réussie !");
         event.preventDefault();
     }
+    /**
+     * Plus tard : Mettre en place une vraie connexion avec backend
+     */
     return(
         <View style={styles.container}>
             <View>
