@@ -1,84 +1,121 @@
 [
 {
     "name": "Rosa",
-    "temperature": "36",
-    "state": "normal"
+    "temperature": "36.5°C",
+    "state": "normal",
+    "date":"01/29/2026"
 },
 {
     "name": "Rachel",
-    "temperature": "46",
-    "state": "Très anormal"
+    "temperature": "36.5°C",
+    "state": "Très anormal",
+    "date":"01/29/2026"
+
 },
 {
     "name": "Maindy",
-    "temperature": "26",
-    "state": "normal"
+    "temperature": "36.5°C",
+    "state": "normal",
+    "date":"01/29/2026"
+
 },
 {
     "name": "Luderson",
-    "temperature": "39",
-    "state": "normal"
+    "temperature": "36.5°C",
+    "state": "normal",
+    "date":"01/29/2026"
+
 },
 {
     "name": "Sara",
-    "temperature": "76",
-    "state": "très normal"
+    "temperature": "35.5°C",
+    "state": "très normal",
+    "date":"01/29/2026"
+  
+
+
 },
 {
     "name": "Lorsen",
-    "temperature": "96",
-    "state": "très normal"
+    "temperature": "36.5°C",
+    "state": "très normal",
+    "date":"01/29/2026"
+
 }
 ,
 {
     "name": "Rachel",
-    "temperature": "46",
-    "state": "Très anormal"
+    "temperature": "36.5°C",
+    "state": "Très anormal",
+    "date":"01/29/2026"
+ 
+
+
 },
 {
     "name": "Maindy",
-    "temperature": "26",
-    "state": "normal"
+    "temperature": "26.5°C",
+    "state": "normal",
+    "date":"01/29/2026"
+
 },
 {
     "name": "Luderson",
-    "temperature": "39",
-    "state": "normal"
+    "temperature": "36.5°C",
+    "state": "normal",
+    "date":"01/29/2026"
+
 },
 {
     "name": "Sara",
-    "temperature": "76",
-    "state": "très normal"
+    "temperature": "36.5°C",
+    "state": "très normal",
+    "date":"01/29/2026"
+
 },
 {
     "name": "Lorsen",
-    "temperature": "96",
-    "state": "très normal"
+    "temperature": "36.5°C",
+    "state": "très normal",
+    "date":"01/29/2026"
+
 }
 ,
 {
     "name": "Rachel",
-    "temperature": "46",
-    "state": "Très anormal"
+    "temperature": "46.3°C",
+    "state": "Très anormal",
+    "date":"01/29/2026"
+
 },
 {
     "name": "Maindy",
-    "temperature": "26",
-    "state": "normal"
+    "temperature": "36.5°C",
+    "state": "normal",
+    "date":"01/29/2026"
+
 },
 {
     "name": "Luderson",
-    "temperature": "39",
-    "state": "normal"
+    "temperature": "36.5°C",
+    "state": "normal",
+    "date":"01/29/2026"
+  
+
+
 },
 {
     "name": "Sara",
     "temperature": "76",
-    "state": "très normal"
+    "state": "très normal",
+    "date":"01/29/2026"
+
 },
 {
     "name": "Lorsen",
     "temperature": "96",
-    "state": "très normal"
+    "state": "très normal",
+    "date":"01/29/2026"
+
 }
 ]

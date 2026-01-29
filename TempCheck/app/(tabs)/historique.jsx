@@ -10,9 +10,8 @@ export default function Historique() {
                     {list.map(data =>{
                         return(
                             <View key={data.key} style={styles.itemBox}>
-
-                                <Text style={styles.data}>{data.name} {data.temperature} {data.state}</Text> 
-                            
+                                <Text style={styles.data}>  Température Corporrelle : {data.temperature}    Date: {data.date}</Text> 
+                                <Text style={styles.data}>  État: {data.state}</Text>
                              </View>
                         )
                     })} 
@@ -39,9 +38,10 @@ const styles = StyleSheet.create({
         fontWeight: "bold"
     },
     data: {
-        fontSize: 15,
+        fontSize: 14,
         fontWeight: "bold",
-        margin: 5,  
+        margin: 5,
+      
               
     },
     itemBox: {
