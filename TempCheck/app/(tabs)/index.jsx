@@ -5,7 +5,7 @@ import { StyleSheet, Text, View } from "react-native";
 export default function Home() {
 
     const [state, setState] = useState("Normal");
-    const getAlertColor = (state: string): [string, string] => {
+    const getAlertColor = ()=> {
             
         switch (state) {
             case "Normal":
