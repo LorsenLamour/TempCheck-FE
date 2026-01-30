@@ -1,10 +1,69 @@
 import { LinearGradient } from "expo-linear-gradient";
-import { useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { useEffect, useState } from "react";
+import { StyleSheet, Text, View, Modal, Alert} from "react-native";
 
 export default function Home() {
 
     const [state, setState] = useState("Normal");
+    const [modalVisible, setModalVisible] = useState(false);
+    const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+
+    useEffect(() => {
+        setModalVisible(true);
+    }, []);
+
+    const questions = [
+        {
+            question: "Comment vous sentez-vous aujourd'hui ?",
+            options: ["Bien", "Fatigué", "Malade"]
+        },
+        {
+            question: "Avez-vous de la fièvre ?",
+            options: ["Oui", "Non"]
+        },
+        {
+            question: "Avez-vous des symptômes respiratoires ?",
+            options: ["Oui", "Non"]
+        },
+        {
+            question: "Vous avez quel âge ?",
+            options: ["Moins de 18 ans", "18-65 ans", "Plus de 65 ans"]
+        }
+    ]
+
+    const handleOptionSelect = (option) => {
+        const nextIndex = currentQuestionIndex + 1;
+        if (nextIndex < questions.length) {
+            if (option === "Bien" || option === "Non") {
+                setState("Normal");
+                setCurrentQuestionIndex(nextIndex);
+            } else if (option === "Fatigué" || option === "Oui") {
+                setState("Anormal");
+                setCurrentQuestionIndex(nextIndex);
+            } else if (option === "Malade" || option === "Plus de 65 ans") {
+                setState("Très Anormal");
+                setModalVisible(false);
+                Alert.alert("Attention", "Votre état de santé est très anormal. Veuillez consulter un médecin immédiatement.");
+                return;
+            }
+        } 
+
+        if (nextIndex < questions.length) {
+            setCurrentQuestionIndex(nextIndex);
+        } else {
+            setModalVisible(false);
+        }
+    };
+
+    const handleSkip = () => {
+            const nextIndex = currentQuestionIndex + 1;
+            if (nextIndex < questions.length) {
+                setCurrentQuestionIndex(nextIndex);
+            } else {
+                setModalVisible(false);
+        }
+    };
+
     const getAlertColor = ()=> {
             
         switch (state) {
@@ -26,6 +85,26 @@ export default function Home() {
                 <Text style={styles.text}>36.5°C</Text>
             </View>
             <Text style={styles.textState}>États: {state}</Text>
+
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => {
+                    setModalVisible(!modalVisible);
+                }}
+            >
+                <View style={styles.modalContainer}> 
+                    <View style={styles.modalView}>
+                        <Text style={styles.modalTitle}>Questionnaire de santé</Text>
+                        <Text style={styles.modalQuestion}>{questions[currentQuestionIndex].question}</Text>
+                        {questions[currentQuestionIndex].options.map((option, index) => (
+                            <Text key={index} style={styles.options} onPress={() => handleOptionSelect(option)}>{option}</Text>
+                        ))}
+                        <Text onPress={() => handleSkip()}>Passer</Text>
+                    </View>
+                </View>
+            </Modal>
 
         </LinearGradient>
     );
@@ -57,5 +136,35 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         borderColor: "#000000",
         borderWidth: 5
+    },
+    modalView: {
+        margin: 20,
+        backgroundColor: "white",
+        borderRadius: 20,
+        padding: 35,
+        alignItems: "center",
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5
+    },
+    modalContainer: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center"
+    },
+    options: {
+        display: "flex",
+        margin: 10
+    },
+    modalTitle: {
+        fontSize: 20,
+        fontWeight: "bold",
+        marginBottom: 20
+    },
+    modalQuestion: {
+        fontSize: 18,
+        marginBottom: 20
     }
 })
