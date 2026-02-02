@@ -1,4 +1,5 @@
 [
   { "email": "john@example.com", "password": "password123", "username": "Joe Doe", "age": 20, "role": "Parent" },
-  { "email": "a@a.com", "password": "1234", "username": "Anna", "age": 22, "role": "Parent" }
+  { "email": "a@a.com", "password": "1234", "username": "Anna", "age": 22, "role": "Parent" },
+  { "email": "rachel@tester.com", "password": "abc123", "username": "Rachel", "age": 22, "role": "Parent" }
 ]

@@ -1,12 +1,17 @@
-import React from "react";
+import React, { useContext } from "react";
 import { View, Text, ScrollView, StyleSheet } from "react-native";
 import list from "../../data/listHistoric.json"
+import { ThemeContext } from "../../context/ThemeContext";
+import { lightColors, darkColors } from "../../assets/colorPalette/colorsPalette"
 
 export default function Historique() {
+
+    const { theme } = useContext(ThemeContext);
+    
+    const colors = theme === "light" ? lightColors : darkColors;
     return (
-            
-                <ScrollView style={styles.container}>
-                <Text style={styles.textHeader}>Historique des alertes</Text>
+                <ScrollView style={[styles.container, { backgroundColor: colors.background }]}>
+                <Text style={[styles.textHeader, { color: colors.text }]}>Historique des alertes</Text>
                     {list.map(data =>{
                         return(
                             <View key={data.key} style={styles.itemBox}>
@@ -17,7 +22,6 @@ export default function Historique() {
                         )
                     })} 
                 </ScrollView>
-      
     )
 }
 

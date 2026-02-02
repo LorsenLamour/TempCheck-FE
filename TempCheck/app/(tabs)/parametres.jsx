@@ -1,41 +1,64 @@
 import React, { useContext } from "react";
-import { View, Text, StyleSheet, Image, Switch } from "react-native";
-
+import { View, Text, StyleSheet, Image, Switch, Alert } from "react-native";
 import { CurrentUserContext } from "../../context/CurrentUserContext";
 import { ThemeContext } from "../../context/ThemeContext";
+import { router } from "expo-router";
+import { lightColors, darkColors } from "../../assets/colorPalette/colorsPalette"
+
+
 
 export default function Settings() {
   const { user } = useContext(CurrentUserContext);
   const { theme, toggleTheme } = useContext(ThemeContext);
 
+  const colors = theme === "light" ? lightColors : darkColors;
+
+  const handleDeconnexion = () => {
+    Alert.alert("Déconnexion", "Êtes-vous sûr de vouloir vous déconnecter ?", [
+      { 
+        text: 'Confirmer',
+        onPress: () => router.replace("/(auth)/connexion"),
+        style: 'destructive'
+      },
+      { text: 'Annuler', style: 'cancel', onPress: () => console.log("Déconnexion annulée") }
+    ]);
+  }
+
+  // Fonction temporaire pour la suppression de compte
+  const handleDeleteAccount = () => {
+    Alert.alert("Supprimer le compte", "Cette action est irréversible. Voulez-vous continuer ?", [
+      { 
+        text: 'Supprimer',
+        onPress: () => console.log("Compte supprimé"),
+        style: 'destructive'
+      },
+      { text: 'Annuler', style: 'cancel', onPress: () => console.log("Suppression annulée") }
+    ]);
+  }
+
   return (
-    <View style={styles.container}>
-      <View style={styles.info}>
-        <Image
-          source={require("../../assets/images/profil.jpg")}
-          style={styles.image}
-        />
+      <View style={[styles.container, { backgroundColor: colors.background }]}>
+        <View style={styles.info}>
+          <Image
+            source={require("../../assets/images/profil.jpg")}
+            style={styles.image}
+          />
 
-        <View style={styles.textContainer}>
-          <Text style={styles.username}>{user?.username}</Text>
-          <Text style={styles.role}>{user?.role}</Text>
+          <View style={styles.textContainer}>
+            <Text style={[styles.username, { color: colors.text }]}>{user?.username}</Text>
+            <Text style={[styles.role, { color: colors.text }]}>{user?.role}</Text>
+          </View>
+
+          <View style={{ marginLeft: 10 }}>
+            <Switch value={theme === "dark"} onValueChange={toggleTheme} />
+          </View>
         </View>
 
-        <View
-          style={[
-            styles.switchWrapper,
-            theme === "light" ? styles.light : styles.dark,
-          ]}
-        >
-          <Switch value={theme === "dark"} onValueChange={toggleTheme} />
+        <View style={styles.settings}>
+          <Text style={[styles.deleteText, { color: colors.text }]} onPress={handleDeleteAccount}>Supprimer le compte</Text>
+          <Text style={[styles.logoutText, { color: colors.text, width: 350 }]} onPress={handleDeconnexion}>Déconnexion</Text>
         </View>
       </View>
-
-      <View style={styles.settings}>
-        <Text style={styles.deleteText}>Supprimer le compte</Text>
-        <Text style={styles.logoutText}>Déconnexion</Text>
-      </View>
-    </View>
   );
 }
 
@@ -43,7 +66,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    marginTop: 100,
   },
 
   info: {
@@ -80,20 +102,19 @@ const styles = StyleSheet.create({
 
   settings: {
     marginTop: 70,
-    backgroundColor: "#E3B7C9",
-    width: 450,        
-    padding: 20,
-    borderTopLeftRadius: 70,
-    borderTopRightRadius: 70,
     gap: 20,
-    marginHorizontal: -20,
-    flex: 1,             
+    marginHorizontal: 10,
+    flex: 1, 
   },
   deleteText: {
     color: "red",
     fontWeight: "bold",
     fontSize: 16,
     marginTop: 50,
+    backgroundColor: "#db8383",
+    padding: 10,
+    borderRadius: 5,
+    textAlign: "center",
   },
   logoutText: {
     marginTop: 20,
@@ -104,6 +125,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     color: "white",
     textAlign: "center",
-    width: 400,          
+    width: 400, 
+    marginLeft: 10,         
   },
 });

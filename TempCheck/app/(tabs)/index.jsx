@@ -1,6 +1,9 @@
 import { LinearGradient } from "expo-linear-gradient";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { StyleSheet, Text, View, Modal, Alert} from "react-native";
+import { ThemeContext } from "../../context/ThemeContext";
+import { lightColors, darkColors } from "../../assets/colorPalette/colorsPalette"
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Home() {
 
@@ -11,6 +14,10 @@ export default function Home() {
     useEffect(() => {
         setModalVisible(true);
     }, []);
+
+    const { theme } = useContext(ThemeContext);
+
+    const colors = theme === "light" ? lightColors : darkColors;
 
     const questions = [
         {
@@ -79,34 +86,35 @@ export default function Home() {
     };
 
     return (
-        <LinearGradient colors={getAlertColor(state)} style={styles.container}>
-            <Text style={styles.textHeader}>Votre température actuelle:</Text>
-            <View style={styles.temperatureContainer}>
-                <Text style={styles.text}>36.5°C</Text>
-            </View>
-            <Text style={styles.textState}>États: {state}</Text>
-
-            <Modal
-                animationType="slide"
-                transparent={true}
-                visible={modalVisible}
-                onRequestClose={() => {
-                    setModalVisible(!modalVisible);
-                }}
-            >
-                <View style={styles.modalContainer}> 
-                    <View style={styles.modalView}>
-                        <Text style={styles.modalTitle}>Questionnaire de santé</Text>
-                        <Text style={styles.modalQuestion}>{questions[currentQuestionIndex].question}</Text>
-                        {questions[currentQuestionIndex].options.map((option, index) => (
-                            <Text key={index} style={styles.options} onPress={() => handleOptionSelect(option)}>{option}</Text>
-                        ))}
-                        <Text onPress={() => handleSkip()}>Passer</Text>
-                    </View>
+            <LinearGradient colors={getAlertColor(state)} style={styles.container}>
+                <Text style={styles.textHeader}>Votre température actuelle:</Text>
+                <View style={styles.temperatureContainer}>
+                    <Text style={styles.text}>36.5°C</Text>
                 </View>
-            </Modal>
+                <Text style={styles.textState}>États: {state}</Text>
 
-        </LinearGradient>
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={modalVisible}
+                    onRequestClose={() => {
+                        setModalVisible(!modalVisible);
+                    }}
+                >
+                    <View style={styles.modalContainer}> 
+                        <View style={styles.modalView}>
+                            <Text style={styles.modalTitle}>Questionnaire de santé</Text>
+                            <Text style={styles.modalQuestion}>{questions[currentQuestionIndex].question}</Text>
+                            <View style={styles.options}>
+                                {questions[currentQuestionIndex].options.map((option, index) => (
+                                    <Text key={index} onPress={() => handleOptionSelect(option)}>{option}</Text>
+                                ))}
+                                <Text onPress={() => handleSkip()}>Passer</Text>
+                            </View>
+                        </View>
+                    </View>
+                </Modal>
+            </LinearGradient>
     );
 }
 
@@ -155,8 +163,11 @@ const styles = StyleSheet.create({
         alignItems: "center"
     },
     options: {
-        display: "flex",
-        margin: 10
+        flexDirection: "row",
+        justifyContent: "space-around",
+        alignItems: "center",
+        margin: 30,
+        gap: 20,
     },
     modalTitle: {
         fontSize: 20,
