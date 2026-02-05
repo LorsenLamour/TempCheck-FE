@@ -125,13 +125,13 @@ const styles = StyleSheet.create({
         alignItems: "center"
     },
     textHeader: {
-        fontSize: 30,
+        fontSize: 20,
         fontWeight: "bold",
         marginBottom: 30
     },
     textState: {
         padding: 20,
-        fontSize: 26,
+        fontSize: 20,
         fontWeight: "bold"
     },
     text: {
