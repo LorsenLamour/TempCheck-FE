@@ -51,7 +51,7 @@ export default function Settings() {
 
           <View>
             <TouchableOpacity>
-              <Text style={[ styles.title, { color: colors.text, backgroundColor: "#a3c4d7", padding: 20, borderRadius: 25}]}>Modifier le profil</Text>
+              <Text style={[{ backgroundColor: "#a3c4d7", padding: 20, borderRadius: 25, fontWeight: "600"}]}>Modifier le profil</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -63,9 +63,17 @@ export default function Settings() {
               <Text style={[styles.text, {color: colors.text}]}>Dark mode</Text>
               <Switch value={theme === "dark"} onValueChange={toggleTheme} />
             </View>
+            <View style={styles.preferences}>
+              <Text style={[styles.text, {color: colors.text}]}>Capteur ON/OFF</Text>
+              <Switch/>
+            </View>
           </View>
           <View>
             <Text style={[ styles.title, { color: colors.text}]}>Notifications</Text>
+            <View style={styles.preferences}>
+              <Text style={[styles.text, {color: colors.text}]}>Notifications activation</Text>
+              <Switch/>
+            </View>
           </View>
           <View style={styles.others}>
             <Text style={[ styles.title, { color: colors.text}]}>Autres</Text>
@@ -123,7 +131,7 @@ const styles = StyleSheet.create({
   preferences: {
     flexDirection: "row",
     marginTop: 30,
-    gap: 200
+    gap: 100
   },
   others: {
     marginTop: 30,
