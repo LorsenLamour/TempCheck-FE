@@ -44,9 +44,10 @@ export default function Historique() {
                     {allAlerts.map((alert, index) => (
                         <View key={index} style={[styles.alerts, {backgroundColor: colorAlerts(alert)}]}>
                             <View style={styles.row}>
-                                <Text style={styles.value}>{alert.username}</Text>
                                 <Text style={styles.value}>{alert.age} ans</Text>
-                                <Text style={styles.value}>{alert.temperature}</Text>
+                                <Text style={styles.value}>{alert.temperature}°C</Text>
+                                <Text style={styles.value}>{alert.date}</Text>
+
                             </View>
                         </View>
                     ))} 
