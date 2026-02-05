@@ -1,12 +1,22 @@
 import { LinearGradient } from "expo-linear-gradient";
 import { useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
+import axios from "axios";
+
+
+try {
+    const response = await axios.get("/");
+    console.log(response)
+
+} catch (error) {
+    console.log(error);
+};
 
 export default function Home() {
 
     const [state, setState] = useState("Normal");
-    const getAlertColor = ()=> {
-            
+    const getAlertColor = () => {
+
         switch (state) {
             case "Normal":
                 return ["#F1FBA1", "#3AF38D"];
