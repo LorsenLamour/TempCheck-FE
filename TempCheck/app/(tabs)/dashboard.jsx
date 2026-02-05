@@ -7,39 +7,39 @@ import { lightColors, darkColors } from "../../assets/colorPalette/colorsPalette
 
 export default function Dashboard() {
 
-    const { user } = useContext(CurrentUserContext);
-    const { theme } = useContext(ThemeContext);
+    // const { user } = useContext(CurrentUserContext);
+    // const { theme } = useContext(ThemeContext);
     
-    const colors = theme === "light" ? lightColors : darkColors; 
+    // const colors = theme === "light" ? lightColors : darkColors; 
 
-    const alertes = user?.alerts || [];
+    // const alertes = user?.alerts || [];
 
 
-    const alertsPerDay = alertes.reduce((acc, alert) => {
-    acc[alert.date] = (acc[alert.date] || 0) + 1;
-    return acc;
-    }, {});
-    console.log(alertsPerDay)
+    // const alertsPerDay = alertes.reduce((acc, alert) => {
+    // acc[alert.date] = (acc[alert.date] || 0) + 1;
+    // return acc;
+    // }, {});
+    // console.log(alertsPerDay)
 
-    const sortedDates = Object.keys(alertsPerDay).sort(
-    (a, b) => new Date(a) - new Date(b)
-    );
-    console.log(sortedDates)
+    // const sortedDates = Object.keys(alertsPerDay).sort(
+    // (a, b) => new Date(a) - new Date(b)
+    // );
+    // console.log(sortedDates)
 
-    const labels = sortedDates.map(d =>
-    new Date(d).toLocaleDateString("fr-CA", { 
-        day: "2-digit",
-        month: "short"
-    })
-    );
-    console.log(labels)
+    // const labels = sortedDates.map(d =>
+    // new Date(d).toLocaleDateString("fr-CA", { 
+    //     day: "2-digit",
+    //     month: "short"
+    // })
+    // );
+    // console.log(labels)
 
-    const values = sortedDates.map(d => alertsPerDay[d]);
-    console.log(values)
+    // const values = sortedDates.map(d => alertsPerDay[d]);
+    // console.log(values)
 
     return (
         <View style={style.container}>
-            <View style={style.info}>
+            {/* <View style={style.info}>
                 <Image
                     source={require("../../assets/images/profil.jpg")}
                     style={style.image}
@@ -80,7 +80,7 @@ export default function Dashboard() {
                     bezier
                     />
 
-            </View>
+            </View> */}
         </View>
     )
 }

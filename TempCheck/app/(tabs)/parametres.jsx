@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { View, Text, StyleSheet, Image, Switch, Alert } from "react-native";
+import { View, Text, StyleSheet, Image, Switch, Alert, TouchableOpacity } from "react-native";
 import { CurrentUserContext } from "../../context/CurrentUserContext";
 import { ThemeContext } from "../../context/ThemeContext";
 import { router } from "expo-router";
@@ -49,14 +49,29 @@ export default function Settings() {
             <Text style={[styles.role, { color: colors.text }]}>{user?.role}</Text>
           </View>
 
-          <View style={{ marginLeft: 10 }}>
-            <Switch value={theme === "dark"} onValueChange={toggleTheme} />
+          <View>
+            <TouchableOpacity>
+              <Text style={[ styles.title, { color: colors.text, backgroundColor: "#a3c4d7", padding: 20, borderRadius: 25}]}>Modifier le profil</Text>
+            </TouchableOpacity>
           </View>
         </View>
 
         <View style={styles.settings}>
-          <Text style={[styles.deleteText, { color: colors.text }]} onPress={handleDeleteAccount}>Supprimer le compte</Text>
-          <Text style={[styles.logoutText, { color: colors.text, width: 350 }]} onPress={handleDeconnexion}>Déconnexion</Text>
+          <View>
+            <Text style={[ styles.title, { color: colors.text}]}>Préférences</Text>
+            <View style={styles.preferences}>
+              <Text style={[styles.text, {color: colors.text}]}>Dark mode</Text>
+              <Switch value={theme === "dark"} onValueChange={toggleTheme} />
+            </View>
+          </View>
+          <View>
+            <Text style={[ styles.title, { color: colors.text}]}>Notifications</Text>
+          </View>
+          <View style={styles.others}>
+            <Text style={[ styles.title, { color: colors.text}]}>Autres</Text>
+            <Text style={[styles.text, { color: "red" }]} onPress={handleDeleteAccount}>Supprimer le compte</Text>
+            <Text style={[styles.text, { color: colors.text, width: 250, backgroundColor: "red", padding: 20, borderRadius: 25, alignSelf: "center", textAlign: "center" }]} onPress={handleDeconnexion}>Déconnexion</Text>
+          </View>
         </View>
       </View>
   );
@@ -67,7 +82,6 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
   },
-
   info: {
     flexDirection: "row",
     alignItems: "center",
@@ -106,26 +120,21 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
     flex: 1, 
   },
-  deleteText: {
-    color: "red",
-    fontWeight: "bold",
-    fontSize: 16,
-    marginTop: 50,
-    backgroundColor: "#db8383",
-    padding: 10,
-    borderRadius: 5,
-    textAlign: "center",
+  preferences: {
+    flexDirection: "row",
+    marginTop: 30,
+    gap: 200
   },
-  logoutText: {
-    marginTop: 20,
-    fontSize: 16,
-    fontWeight: "bold",
-    backgroundColor: "red",
-    padding: 10,
-    borderRadius: 5,
-    color: "white",
-    textAlign: "center",
-    width: 400, 
-    marginLeft: 10,         
+  others: {
+    marginTop: 30,
   },
+  text: {
+    margin: 20,
+    fontWeight: "600"
+  },
+  title: {
+    fontSize: 15,
+    color: "#c8c8c8",
+    fontWeight: "500"
+  }
 });
