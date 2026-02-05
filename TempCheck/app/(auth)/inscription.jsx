@@ -3,6 +3,10 @@ import React, { useState } from "react";
 import { router } from "expo-router";
 import { useContext } from "react";
 import { CurrentUserContext } from "../../context/CurrentUserContext";
+import { ThemeContext } from "../../context/ThemeContext";
+import { lightColors, darkColors } from "../../assets/colorPalette/colorsPalette"
+import { SafeAreaView } from "react-native-safe-area-context";
+
 
 export default function Inscription() {
 
@@ -12,58 +16,64 @@ export default function Inscription() {
     const [username, setUsername] = useState("");
 
     const { user, setCurrentUser } = useContext(CurrentUserContext);
+
+    const { theme } = useContext(ThemeContext);
+    
+    const colors = theme === "light" ? lightColors : darkColors;
     
      const handleSubmit = (event) => {
             Alert.alert("Inscription réussie !");
             event.preventDefault();
     }
         return(
-            <View style={styles.container}>
-                <View>
-                    <Text style={styles.title}>Bienvenue sur TempCheck</Text>
-                    <Text style={styles.subTitle}>Inscrivez-vous pour avoir accès à l'application</Text>
-                </View>
-                <View style={styles.form}>
-                    <Text>Nom d'utilisateur</Text>
-                    <TextInput
-                        style={styles.input}
-                        value={username}
-                        onChangeText={setUsername}
-                        placeholder="Entrez votre nom d'utilisateur"
-                    />
-                    <Text>Email</Text>
-                    <TextInput
-                        style={styles.input}
-                        value={email}
-                        onChangeText={setEmail}
-                        placeholder="Entrez votre email"
-                    />
-                    <Text>Mot de passe</Text>
-                    <TextInput
-                        style={styles.input}
-                        value={password}
-                        onChangeText={setPassword}
-                        placeholder="Entrez votre mot de passe"
-                        secureTextEntry
-                    />
-                    <Text>Confirmez le mot de passe</Text>
-                    <TextInput
-                        style={styles.input}
-                        value={confirmPassword}
-                        onChangeText={setConfirmPassword}
-                        placeholder="Confirmez votre mot de passe"
-                        secureTextEntry
-                    />
-                    <TouchableOpacity onPress={handleSubmit} style={styles.button}>
-                        <Text>Se connecter</Text>
-                    </TouchableOpacity>
-                    <Text style={styles.text}>Vous avez déjà un compte ? {" "}
-                        <Text style={styles.link} onPress={() => router.push("/(auth)/connexion")}>
-                            Connectez-vous
+            <SafeAreaView style={{ flex: 1, backgroundColor: colors.tabNav }}>
+                <View style={[styles.container, { backgroundColor: colors.background }]}>
+                    <View>
+                        <Text style={[styles.title, { color: colors.text }]}>Bienvenue sur TempCheck</Text>
+                        <Text style={[styles.subTitle, { color: colors.text }]}>Inscrivez-vous pour avoir accès à l'application</Text>
+                    </View>
+                    <View style={styles.form}>
+                        <Text style={{ color: colors.text }}>Nom d'utilisateur</Text>
+                        <TextInput
+                            style={styles.input}
+                            value={username}
+                            onChangeText={setUsername}
+                            placeholder="Entrez votre nom d'utilisateur"
+                        />
+                        <Text style={{ color: colors.text }}>Email</Text>
+                        <TextInput
+                            style={styles.input}
+                            value={email}
+                            onChangeText={setEmail}
+                            placeholder="Entrez votre email"
+                        />
+                        <Text style={{ color: colors.text }}>Mot de passe</Text>
+                        <TextInput
+                            style={styles.input}
+                            value={password}
+                            onChangeText={setPassword}
+                            placeholder="Entrez votre mot de passe"
+                            secureTextEntry
+                        />
+                        <Text style={{ color: colors.text }}>Confirmez le mot de passe</Text>
+                        <TextInput
+                            style={styles.input}
+                            value={confirmPassword}
+                            onChangeText={setConfirmPassword}
+                            placeholder="Confirmez votre mot de passe"
+                            secureTextEntry
+                        />
+                        <TouchableOpacity onPress={handleSubmit} style={[styles.button, { backgroundColor: colors.authButton }]}>
+                            <Text style={{ color: colors.text }}>S'inscrire</Text>
+                        </TouchableOpacity>
+                        <Text style={styles.text}>Vous avez déjà un compte ? {" "}
+                            <Text style={styles.link} onPress={() => router.push("/(auth)/connexion")}>
+                                Connectez-vous
+                            </Text>
                         </Text>
-                    </Text>
+                    </View>
                 </View>
-            </View>
+            </SafeAreaView>
         )
 }
 

@@ -4,6 +4,10 @@ import { router } from "expo-router";
 import { useContext } from "react";
 import { CurrentUserContext } from "../../context/CurrentUserContext";
 import TestData from "../../data/testUser.json";
+import { ThemeContext } from "../../context/ThemeContext";
+import { lightColors, darkColors } from "../../assets/colorPalette/colorsPalette"
+import { SafeAreaView } from "react-native-safe-area-context";
+
 
 export default function Connexion() {
 
@@ -11,6 +15,10 @@ export default function Connexion() {
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+
+    const { theme } = useContext(ThemeContext);
+    
+    const colors = theme === "light" ? lightColors : darkColors;
 
 
         const handleSubmit = () => {
@@ -28,37 +36,39 @@ export default function Connexion() {
          * Plus tard : Mettre en place une vraie connexion avec backend
          */
     return(
-        <View style={styles.container}>
-            <View>
-                <Text style={styles.title}>Bienvenue sur TempCheck</Text>
-                <Text style={styles.subTitle}>Connectez-vous à votre compte</Text>
-            </View>
-            <View style={styles.form}>
-                <Text>Email</Text>
-                <TextInput
-                    style={styles.input}
-                    value={email}
-                    onChangeText={setEmail}
-                    placeholder="Entrez votre email"
-                />
-                <Text>Mot de passe</Text>
-                <TextInput
-                    style={styles.input}
-                    value={password}
-                    onChangeText={setPassword}
-                    placeholder="Entrez votre mot de passe"
-                    secureTextEntry
-                />
-                <TouchableOpacity onPress={handleSubmit} style={styles.button}>
-                    <Text>Se connecter</Text>
-                </TouchableOpacity>
-                <Text style={styles.text}>Vous n'avez pas de compte ? {" "}
-                    <Text style={styles.link} onPress={() => router.push("/(auth)/inscription")}>
-                        Inscrivez-vous
+        <SafeAreaView style={{ flex: 1, backgroundColor: colors.tabNav }}>
+            <View style={[styles.container, { backgroundColor: colors.background }]}>
+                <View>
+                    <Text style={[styles.title, { color: colors.text }]}>Bienvenue sur TempCheck</Text>
+                    <Text style={[styles.subTitle, { color: colors.text }]}>Connectez-vous à votre compte</Text>
+                </View>
+                <View style={styles.form}>
+                    <Text style={{ color: colors.text }}>Email</Text>
+                    <TextInput
+                        style={styles.input}
+                        value={email}
+                        onChangeText={setEmail}
+                        placeholder="Entrez votre email"
+                    />
+                    <Text style={{ color: colors.text }}>Mot de passe</Text>
+                    <TextInput
+                        style={styles.input}
+                        value={password}
+                        onChangeText={setPassword}
+                        placeholder="Entrez votre mot de passe"
+                        secureTextEntry
+                    />
+                    <TouchableOpacity onPress={handleSubmit} style={[styles.button, { backgroundColor: colors.authButton }]}>
+                        <Text style={{ color: colors.text }}>Se connecter</Text>
+                    </TouchableOpacity>
+                    <Text style={[styles.text, { color: colors.text }]}>Vous n'avez pas de compte ? {" "}
+                        <Text style={styles.link} onPress={() => router.push("/(auth)/inscription")}>
+                            Inscrivez-vous
+                        </Text>
                     </Text>
-                </Text>
+                </View>
             </View>
-        </View>
+        </SafeAreaView>
     )
 }
 
