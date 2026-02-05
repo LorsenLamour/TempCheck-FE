@@ -1,20 +1,46 @@
 [
-  { "email": "john@example.com", "password": "password123", "username": "Joe Doe", "age": 20, "role": "Parent" },
-  { "email": "a@a.com", "password": "1234", "username": "Anna", "age": 22, "role": "Parent" },
+  { 
+    "email": "john@example.com", 
+    "password": "password123", 
+    "username": "Joe Doe", 
+    "age": 20, 
+    "role": "Parent",
+    "alerts": [
+      { "date": "2026-01-31", "temperature": 37.2, "type": "Moderate" },
+      { "date": "2026-02-31", "temperature": 37.2, "type": "Moderate" }
+    ]
+  },
+  { 
+    "email": "a@a.com", 
+    "password": "1234", 
+    "username": "Anna", 
+    "age": 22, 
+    "role": "Parent",
+    "alerts": [
+      { "date": "2026-01-31", "temperature": 37.2, "type": "Normal" },
+      { "date": "2026-02-31", "temperature": 37.2, "type": "Normal" },
+      { "date": "2026-02-31", "temperature": 35.5, "type": "Hypothermie" },
+      { "date": "2026-02-01", "temperature": 40, "type": "Très anormale" }
+    ]
+  },
   { 
     "email": "rachel@tester.com", 
     "password": "abc123", 
     "username": "Rachel", 
     "age": 22, 
     "role": "Parent",
+    "membres": [
+      "a@a.com",
+      "joe@example.com"
+    ],
     "alerts": [
-      { "date": "2026-01-31", "temperature": 37.2, "type": "Moderate" },
-      { "date": "2026-02-31", "temperature": 37.2, "type": "Moderate" },
-      { "date": "2026-02-31", "temperature": 37.2, "type": "Moderate" },
-      { "date": "2026-02-01", "temperature": 37.2, "type": "Moderate" },
-      { "date": "2026-02-01", "temperature": 38.1, "type": "Urgent" },
-      { "date": "2026-02-02", "temperature": 37.8, "type": "Moderate" },
-      { "date": "2026-02-03", "temperature": 38.5, "type": "Urgent" }
+      { "date": "2026-01-31", "temperature": 37.2, "type": "Normal" },
+      { "date": "2026-02-31", "temperature": 37.2, "type": "Normal" },
+      { "date": "2026-02-31", "temperature": 37.2, "type": "Normal" },
+      { "date": "2026-02-01", "temperature": 37.2, "type": "Normal" },
+      { "date": "2026-02-01", "temperature": 38.1, "type": "Anormale" },
+      { "date": "2026-02-02", "temperature": 37.8, "type": "Normal" },
+      { "date": "2026-02-03", "temperature": 38.5, "type": "Anormale" }
     ]
   }
 ]

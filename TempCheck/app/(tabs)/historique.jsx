@@ -1,26 +1,55 @@
 import React, { useContext } from "react";
 import { View, Text, ScrollView, StyleSheet } from "react-native";
-import list from "../../data/listHistoric.json"
+import list from "../../data/testUser.json"
 import { ThemeContext } from "../../context/ThemeContext";
 import { lightColors, darkColors } from "../../assets/colorPalette/colorsPalette"
+import { CurrentUserContext } from "../../context/CurrentUserContext";
 
 export default function Historique() {
 
     const { theme } = useContext(ThemeContext);
-    
+    const { user } = useContext(CurrentUserContext);
+
+    const allAlerts = list.filter(u =>
+        u.email === user.email ||
+        user.membres?.includes(u.email)
+    )
+    .flatMap(u => 
+        u.alerts.map(alert => ({
+            ...alert,
+            username: u.username,
+            age: u.age
+        }))
+    )
+
+    // Condition couleur type
+
+    const colorAlerts = (alert) => {
+        const temp = alert.temperature
+        if (temp <= 37.5){
+            return "#3AF38D"
+        } else if (temp <= 38.5){
+            return "#F1FBA1"
+        } else if (temp <= 40){
+            return "#f3b238"
+        } else {
+            return "#FBA1A1"
+        }
+    }
+
     const colors = theme === "light" ? lightColors : darkColors;
     return (
                 <ScrollView style={[styles.container, { backgroundColor: colors.background }]}>
                 <Text style={[styles.textHeader, { color: colors.text }]}>Historique des alertes</Text>
-                    {list.map(data =>{
-                        return(
-                            <View key={data.key} style={styles.itemBox}>
-
-                                <Text style={styles.data}>{data.name} {data.temperature} {data.state}</Text> 
-                            
-                             </View>
-                        )
-                    })} 
+                    {allAlerts.map((alert, index) => (
+                        <View key={index} style={[styles.alerts, {backgroundColor: colorAlerts(alert)}]}>
+                            <View style={styles.row}>
+                                <Text style={styles.value}>{alert.username}</Text>
+                                <Text style={styles.value}>{alert.age} ans</Text>
+                                <Text style={styles.value}>{alert.temperature}</Text>
+                            </View>
+                        </View>
+                    ))} 
                 </ScrollView>
     )
 }
@@ -42,20 +71,32 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: "bold"
     },
-    data: {
+    alerts: {
+        borderWidth: 2,
+        borderRadius: 12, 
+        padding: 15, 
+        marginBottom: 16,
+        width: "90%",
+        alignSelf: "center",
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5
+    },
+    row: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        marginBottom: 6
+    },
+    label: {
+        fontSize: 14,
+        opacity: 0.7
+    },
+    value: {
         fontSize: 15,
-        fontWeight: "bold",
-        margin: 5,  
-              
-    },
-    itemBox: {
-        borderRadius: 10,
-        borderColor: "#000000",
-        borderWidth: 3,
-        margin: 10,
-        backgroundColor: "#F1FBA1",
-    
-       
-    },
+        fontWeight: "600",
+        gap: 50,
+    }
     
 })
