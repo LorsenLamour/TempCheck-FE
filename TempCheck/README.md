@@ -49,11 +49,8 @@ Join our community of developers creating universal apps.
 - [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
 - [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
 
-<<<<<<< HEAD
 1. https://github.com/axios/axios
-=======
 
 # Source:
 1. Datetime Format
 https://demo.mobiscroll.com/react/datetime/formatting-return-values
->>>>>>> e8541b0023d139b69ed26f03750c356984c7c7a5

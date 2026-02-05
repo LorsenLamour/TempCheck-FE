@@ -5,15 +5,14 @@ import { ThemeContext } from "../../context/ThemeContext";
 import { lightColors, darkColors } from "../../assets/colorPalette/colorsPalette"
 import { SafeAreaView } from "react-native-safe-area-context";
 import axios from "axios";
+ 
+//  try {
+//      const response = await axios.get("/");
+//      console.log(response)
 
-
-// try {
-//     const response = await axios.get("/");
-//     console.log(response)
-
-// } catch (error) {
-//     console.log(error);
-// };
+//  } catch (error) {
+//      console.log(error);
+//  };
 
 export default function Home() {
 

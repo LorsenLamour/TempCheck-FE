@@ -9,11 +9,11 @@ export default function DashboardScreen() {
 
       <LineChart
         data={{
-          labels: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday","Saturday", "Sunday"],
+          labels: ["Mon", "Tues", "Wed", "Thurs", "Fri","Sat", "Sun"],
           datasets: [{ data: [20, 45, 28, 35, 50, 60, 40] }],
         }}
         
-        width={Dimensions.get("window").width -40}
+        width={Dimensions.get("window").width -30}
         height={220}
         chartConfig={{
           backgroundColor: "#fff",
