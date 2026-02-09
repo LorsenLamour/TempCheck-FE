@@ -21,9 +21,26 @@ export default function Inscription() {
     
     const colors = theme === "light" ? lightColors : darkColors;
     
-     const handleSubmit = (event) => {
-            Alert.alert("Inscription réussie !");
-            event.preventDefault();
+     const handleSubmit = () => {
+            const userFound = TestData.push(
+                user => 
+                    user.email === email
+                );
+
+            if (userFound){
+                Alert.alert("Erreur d'inscription", "Cet email est déjà utilisé.")
+                return;
+            }
+
+            const newUser = {
+                username,
+                email, 
+                password
+            }
+            
+            TestData.push(newUser)
+            setCurrentUser(newUser);
+            router.replace("/questionnaires_screen");
     }
         return(
             <SafeAreaView style={{ flex: 1, backgroundColor: colors.tabNav }}>
