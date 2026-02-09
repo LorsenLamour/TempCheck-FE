@@ -1,29 +1,33 @@
-import React, { useContext } from "react";
-import { View, Text, ScrollView, StyleSheet } from "react-native";
-import list from "../../data/testUser.json"
-import { ThemeContext } from "../../context/ThemeContext";
-import { lightColors, darkColors } from "../../assets/colorPalette/colorsPalette"
+import React, { useContext,useEffect,useState } from "react";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { darkColors, lightColors } from "../../assets/colorPalette/colorsPalette";
 import { CurrentUserContext } from "../../context/CurrentUserContext";
+import { ThemeContext } from "../../context/ThemeContext";
+import axios from "axios";
+//import list from "../../data/listHistoric.json";
+//import TemperatureList from"../../context/alertService"
 
 export default function Historique() {
-
+    const [data, setData] = useState(null);
     const { theme } = useContext(ThemeContext);
     const { user } = useContext(CurrentUserContext);
+ 
+    useEffect(() => {
 
-    const allAlerts = list.filter(u =>
-        u.email === user.email ||
-        user.membres?.includes(u.email)
-    )
-    .flatMap(u => 
-        u.alerts.map(alert => ({
-            ...alert,
-            username: u.username,
-            age: u.age
-        }))
+        axios.get(`http://localhost:5000/api/temperature/`).then(response => {
+            console.log("Données reçues:", response.data);
+            setData(response.data);
+        }).catch(error => {
+            console.error("Erreur lors de la récupération des données:", error);
+        })
+    }, []
     )
 
+    const dataTemp = data
+    const list = dataTemp?.[dataTemp.length - 1]
+   // const list = data
     // Condition couleur type
-
+ 
     const colorAlerts = (alert) => {
         const temp = alert.temperature
         if (temp <= 37.5){
@@ -36,25 +40,23 @@ export default function Historique() {
             return "#FBA1A1"
         }
     }
-
+ 
     const colors = theme === "light" ? lightColors : darkColors;
     return (
                 <ScrollView style={[styles.container, { backgroundColor: colors.background }]}>
                 <Text style={[styles.textHeader, { color: colors.text }]}>Historique des alertes</Text>
-                    {allAlerts.map((alert, index) => (
-                        <View key={index} style={[styles.alerts, {backgroundColor: colorAlerts(alert)}]}>
+                        <View style={[styles.alerts, {backgroundColor: colorAlerts(alert)}]}>
                             <View style={styles.row}>
-                                <Text style={styles.value}>{alert.age} ans</Text>
-                                <Text style={styles.value}>{alert.temperature}°C</Text>
-                                <Text style={styles.value}>{alert.date}</Text>
-
+                                <Text style={styles.value}>{list?.statut || 0}</Text>
+                                <Text style={styles.value}>{list?.temperature  || 0}°C</Text>
+                                <Text style={styles.value}>{list?.updatedAt || 0}</Text> 
+ 
                             </View>
                         </View>
-                    ))} 
                 </ScrollView>
     )
 }
-
+ 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -74,8 +76,8 @@ const styles = StyleSheet.create({
     },
     alerts: {
         borderWidth: 2,
-        borderRadius: 12, 
-        padding: 15, 
+        borderRadius: 12,
+        padding: 15,
         marginBottom: 16,
         width: "90%",
         alignSelf: "center",
@@ -99,5 +101,5 @@ const styles = StyleSheet.create({
         fontWeight: "600",
         gap: 50,
     }
-    
+   
 })

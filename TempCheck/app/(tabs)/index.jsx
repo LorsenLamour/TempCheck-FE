@@ -20,19 +20,17 @@ export default function Home() {
         axios.get(`http://localhost:5000/api/temperature/`).then(response => {
             console.log("Données reçues:", response.data);
             setData(response.data);
-            const x = response.data
-            const recent = x[x.length - 1]
-            console.log("recent", recent.temperature)
         }).catch(error => {
             console.error("Erreur lors de la récupération des données:", error);
         })
     }, []
     )
     const dataTemp = data
-    const recentData = dataTemp?.[dataTemp.length -1]
-    const [state, setState] = useState(null);
-    //setState(recentData?.statut || 0)
-   // console.log(state)
+    const recentData = dataTemp?.[dataTemp.length - 1]
+   
+    //const [state, setState] = useState(null);
+    const state = recentData?.statut
+    console.log("statut", state)
     useEffect(() => {
         setModalVisible(true);
     }, []);
@@ -96,11 +94,11 @@ export default function Home() {
     const getAlertColor = () => {
 
         switch (state) {
-            case "Normal":
+            case "Neutre":
                 return ["#F1FBA1", "#3AF38D"];
-            case "Anormal":
+            case "A surveiller":
                 return ["#F1FBA1", "#F33A3A"];
-            case "Très Anormal":
+            case "Urgent":
                 return ["#FA8B8B", "#FF0000"];
             default:
                 return ["#F1FBA1", "#3AF38D"];
