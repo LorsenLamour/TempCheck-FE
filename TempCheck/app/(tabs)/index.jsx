@@ -1,31 +1,38 @@
 import { LinearGradient } from "expo-linear-gradient";
 import { useEffect, useState, useContext } from "react";
-import { StyleSheet, Text, View, Modal, Alert} from "react-native";
+import { StyleSheet, Text, View, Modal, Alert } from "react-native";
 import { ThemeContext } from "../../context/ThemeContext";
 import { lightColors, darkColors } from "../../assets/colorPalette/colorsPalette"
 import { SafeAreaView } from "react-native-safe-area-context";
 import axios from "axios";
 import api from "../../apiConfig"
- 
- 
+
+
 
 export default function Home() {
 
     const [data, setData] = useState(null);
-    const [state, setState] = useState("Normal");
     const [modalVisible, setModalVisible] = useState(false);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
 
-useEffect(() => {
+    useEffect(() => {
 
-      axios.get(api.baseURL + "/").then(response => {
-        console.log("Données reçues:", response.data);
-        setData(response.data);
-      }).catch(error => {
-        console.log("Erreur lors de la récupération des données:", error);
-      })})
-
-
+        axios.get(`http://localhost:5000/api/temperature/`).then(response => {
+            console.log("Données reçues:", response.data);
+            setData(response.data);
+            const x = response.data
+            const recent = x[x.length - 1]
+            console.log("recent", recent.temperature)
+        }).catch(error => {
+            console.error("Erreur lors de la récupération des données:", error);
+        })
+    }, []
+    )
+    const dataTemp = data
+    const recentData = dataTemp?.[dataTemp.length -1]
+    const [state, setState] = useState(null);
+    //setState(recentData?.statut || 0)
+   // console.log(state)
     useEffect(() => {
         setModalVisible(true);
     }, []);
@@ -68,7 +75,7 @@ useEffect(() => {
                 Alert.alert("Attention", "Votre état de santé est très anormal. Veuillez consulter un médecin immédiatement.");
                 return;
             }
-        } 
+        }
 
         if (nextIndex < questions.length) {
             setCurrentQuestionIndex(nextIndex);
@@ -78,16 +85,16 @@ useEffect(() => {
     };
 
     const handleSkip = () => {
-            const nextIndex = currentQuestionIndex + 1;
-            if (nextIndex < questions.length) {
-                setCurrentQuestionIndex(nextIndex);
-            } else {
-                setModalVisible(false);
+        const nextIndex = currentQuestionIndex + 1;
+        if (nextIndex < questions.length) {
+            setCurrentQuestionIndex(nextIndex);
+        } else {
+            setModalVisible(false);
         }
     };
 
-    const getAlertColor = ()=> {
-            
+    const getAlertColor = () => {
+
         switch (state) {
             case "Normal":
                 return ["#F1FBA1", "#3AF38D"];
@@ -101,35 +108,35 @@ useEffect(() => {
     };
 
     return (
-            <LinearGradient colors={getAlertColor(state)} style={styles.container}>
-                <Text style={styles.textHeader}>Votre température actuelle:</Text>
-                <View style={styles.temperatureContainer}>
-                    <Text style={styles.text}>{data?.temperature || 0}°C</Text>
-                </View>
-                <Text style={styles.textState}>États: {state}</Text>
+        <LinearGradient colors={getAlertColor(state)} style={styles.container}>
+            <Text style={styles.textHeader}>Votre température actuelle:</Text>
+            <View style={styles.temperatureContainer}>
+                <Text style={styles.text}>{recentData?.temperature || 0}°C</Text>
+            </View>
+            <Text style={styles.textState}>États: {state}</Text>
 
-                <Modal
-                    animationType="slide"
-                    transparent={true}
-                    visible={modalVisible}
-                    onRequestClose={() => {
-                        setModalVisible(!modalVisible);
-                    }}
-                >
-                    <View style={styles.modalContainer}> 
-                        <View style={styles.modalView}>
-                            <Text style={styles.modalTitle}>Questionnaire de santé</Text>
-                            <Text style={styles.modalQuestion}>{questions[currentQuestionIndex].question}</Text>
-                            <View style={styles.options}>
-                                {questions[currentQuestionIndex].options.map((option, index) => (
-                                    <Text key={index} onPress={() => handleOptionSelect(option)}>{option}</Text>
-                                ))}
-                                <Text onPress={() => handleSkip()}>Passer</Text>
-                            </View>
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => {
+                    setModalVisible(!modalVisible);
+                }}
+            >
+                <View style={styles.modalContainer}>
+                    <View style={styles.modalView}>
+                        <Text style={styles.modalTitle}>Questionnaire de santé</Text>
+                        <Text style={styles.modalQuestion}>{questions[currentQuestionIndex].question}</Text>
+                        <View style={styles.options}>
+                            {questions[currentQuestionIndex].options.map((option, index) => (
+                                <Text key={index} onPress={() => handleOptionSelect(option)}>{option}</Text>
+                            ))}
+                            <Text onPress={() => handleSkip()}>Passer</Text>
                         </View>
                     </View>
-                </Modal>
-            </LinearGradient>
+                </View>
+            </Modal>
+        </LinearGradient>
     );
 }
 
