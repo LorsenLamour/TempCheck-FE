@@ -5,20 +5,26 @@ import { ThemeContext } from "../../context/ThemeContext";
 import { lightColors, darkColors } from "../../assets/colorPalette/colorsPalette"
 import { SafeAreaView } from "react-native-safe-area-context";
 import axios from "axios";
+import api from "../../apiConfig"
  
-//  try {
-//      const response = await axios.get("/");
-//      console.log(response)
-
-//  } catch (error) {
-//      console.log(error);
-//  };
+ 
 
 export default function Home() {
 
+    const [data, setData] = useState(null);
     const [state, setState] = useState("Normal");
     const [modalVisible, setModalVisible] = useState(false);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+
+useEffect(() => {
+
+      axios.get(api.baseURL + "/").then(response => {
+        console.log("Données reçues:", response.data);
+        setData(response.data);
+      }).catch(error => {
+        console.log("Erreur lors de la récupération des données:", error);
+      })})
+
 
     useEffect(() => {
         setModalVisible(true);
@@ -51,13 +57,13 @@ export default function Home() {
         const nextIndex = currentQuestionIndex + 1;
         if (nextIndex < questions.length) {
             if (option === "Bien" || option === "Non") {
-                setState("Normal");
+                // Les réponses doit aller au backend 
                 setCurrentQuestionIndex(nextIndex);
             } else if (option === "Fatigué" || option === "Oui") {
-                setState("Anormal");
+
                 setCurrentQuestionIndex(nextIndex);
             } else if (option === "Malade" || option === "Plus de 65 ans") {
-                setState("Très Anormal");
+
                 setModalVisible(false);
                 Alert.alert("Attention", "Votre état de santé est très anormal. Veuillez consulter un médecin immédiatement.");
                 return;
@@ -98,7 +104,7 @@ export default function Home() {
             <LinearGradient colors={getAlertColor(state)} style={styles.container}>
                 <Text style={styles.textHeader}>Votre température actuelle:</Text>
                 <View style={styles.temperatureContainer}>
-                    <Text style={styles.text}>36.5°C</Text>
+                    <Text style={styles.text}>{data?.temperature || 0}°C</Text>
                 </View>
                 <Text style={styles.textState}>États: {state}</Text>
 
