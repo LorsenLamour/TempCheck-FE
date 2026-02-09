@@ -30,7 +30,7 @@ export default function Connexion() {
             }
             
             setCurrentUser(foundUser);
-            router.replace("/(tabs)");
+            router.replace("/questionnaires_screen");
         }
         /**
          * Plus tard : Mettre en place une vraie connexion avec backend

@@ -164,38 +164,5 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         borderColor: "#000000",
         borderWidth: 5
-    },
-    modalView: {
-        margin: 20,
-        backgroundColor: "white",
-        borderRadius: 20,
-        padding: 35,
-        alignItems: "center",
-        shadowColor: "#000",
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.25,
-        shadowRadius: 4,
-        elevation: 5
-    },
-    modalContainer: {
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center"
-    },
-    options: {
-        flexDirection: "row",
-        justifyContent: "space-around",
-        alignItems: "center",
-        margin: 30,
-        gap: 20,
-    },
-    modalTitle: {
-        fontSize: 20,
-        fontWeight: "bold",
-        marginBottom: 20
-    },
-    modalQuestion: {
-        fontSize: 18,
-        marginBottom: 20
     }
 })
