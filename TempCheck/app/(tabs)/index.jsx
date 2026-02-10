@@ -12,8 +12,7 @@ import api from "../../apiConfig"
 export default function Home() {
 
     const [data, setData] = useState(null);
-    const [modalVisible, setModalVisible] = useState(false);
-    const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+
 
     useEffect(() => {
 
@@ -31,65 +30,10 @@ export default function Home() {
     //const [state, setState] = useState(null);
     const state = recentData?.statut
     console.log("statut", state)
-    useEffect(() => {
-        setModalVisible(true);
-    }, []);
 
     const { theme } = useContext(ThemeContext);
 
     const colors = theme === "light" ? lightColors : darkColors;
-
-    const questions = [
-        {
-            question: "Comment vous sentez-vous aujourd'hui ?",
-            options: ["Bien", "Fatigué", "Malade"]
-        },
-        {
-            question: "Avez-vous de la fièvre ?",
-            options: ["Oui", "Non"]
-        },
-        {
-            question: "Avez-vous des symptômes respiratoires ?",
-            options: ["Oui", "Non"]
-        },
-        {
-            question: "Vous avez quel âge ?",
-            options: ["Moins de 18 ans", "18-65 ans", "Plus de 65 ans"]
-        }
-    ]
-
-    const handleOptionSelect = (option) => {
-        const nextIndex = currentQuestionIndex + 1;
-        if (nextIndex < questions.length) {
-            if (option === "Bien" || option === "Non") {
-                // Les réponses doit aller au backend 
-                setCurrentQuestionIndex(nextIndex);
-            } else if (option === "Fatigué" || option === "Oui") {
-
-                setCurrentQuestionIndex(nextIndex);
-            } else if (option === "Malade" || option === "Plus de 65 ans") {
-
-                setModalVisible(false);
-                Alert.alert("Attention", "Votre état de santé est très anormal. Veuillez consulter un médecin immédiatement.");
-                return;
-            }
-        }
-
-        if (nextIndex < questions.length) {
-            setCurrentQuestionIndex(nextIndex);
-        } else {
-            setModalVisible(false);
-        }
-    };
-
-    const handleSkip = () => {
-        const nextIndex = currentQuestionIndex + 1;
-        if (nextIndex < questions.length) {
-            setCurrentQuestionIndex(nextIndex);
-        } else {
-            setModalVisible(false);
-        }
-    };
 
     const getAlertColor = () => {
 
@@ -112,28 +56,6 @@ export default function Home() {
                 <Text style={styles.text}>{recentData?.temperature || 0}°C</Text>
             </View>
             <Text style={styles.textState}>États: {state}</Text>
-
-            <Modal
-                animationType="slide"
-                transparent={true}
-                visible={modalVisible}
-                onRequestClose={() => {
-                    setModalVisible(!modalVisible);
-                }}
-            >
-                <View style={styles.modalContainer}>
-                    <View style={styles.modalView}>
-                        <Text style={styles.modalTitle}>Questionnaire de santé</Text>
-                        <Text style={styles.modalQuestion}>{questions[currentQuestionIndex].question}</Text>
-                        <View style={styles.options}>
-                            {questions[currentQuestionIndex].options.map((option, index) => (
-                                <Text key={index} onPress={() => handleOptionSelect(option)}>{option}</Text>
-                            ))}
-                            <Text onPress={() => handleSkip()}>Passer</Text>
-                        </View>
-                    </View>
-                </View>
-            </Modal>
         </LinearGradient>
     );
 }
