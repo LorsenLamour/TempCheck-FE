@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
-import { View, Text, StyleSheet, ScrollView, Dimensions, Modal, Alert } from "react-native";
+import { View, Text, StyleSheet, Modal } from "react-native";
 import { ThemeContext } from "../context/ThemeContext";
 import { lightColors, darkColors } from "../assets/colorPalette/colorsPalette"
 import { router } from "expo-router";
