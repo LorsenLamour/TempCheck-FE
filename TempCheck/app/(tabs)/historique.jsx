@@ -27,16 +27,20 @@ export default function Historique() {
     // const list = data
     // Condition couleur type
 
-    const colorAlerts = (alert) => {
-        const temp = alert.temperature
+    const colorAlerts = (data) => {
+        const temp = data?.temperature
         if (temp <= 37.5) {
+            // Vert
             return "#3AF38D"
         } else if (temp <= 38.5) {
+            //Jaune
             return "#F1FBA1"
         } else if (temp <= 40) {
+            // Orange
             return "#f3b238"
         } else {
-            return "#FBA1A1"
+            //
+            return "#FF0000"
         }
     }
 
