@@ -1,62 +1,63 @@
-import React, { useContext,useEffect,useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { darkColors, lightColors } from "../../assets/colorPalette/colorsPalette";
 import { CurrentUserContext } from "../../context/CurrentUserContext";
 import { ThemeContext } from "../../context/ThemeContext";
-import axios from "axios";
+import { api } from "../../apiConfig";
 //import list from "../../data/listHistoric.json";
 //import TemperatureList from"../../context/alertService"
 
 export default function Historique() {
-    const [data, setData] = useState(null);
+    const [data, setData] = useState([]);
     const { theme } = useContext(ThemeContext);
     const { user } = useContext(CurrentUserContext);
- 
+
     useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await api();
+                setData(response);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+        fetchData();
+    }, []);
 
-        axios.get(`http://localhost:5000/api/temperature/`).then(response => {
-            console.log("Données reçues:", response.data);
-            setData(response.data);
-        }).catch(error => {
-            console.error("Erreur lors de la récupération des données:", error);
-        })
-    }, []
-    )
-
-    const dataTemp = data
-    const list = dataTemp?.[dataTemp.length - 1]
-   // const list = data
+    // const list = data
     // Condition couleur type
- 
+
     const colorAlerts = (alert) => {
         const temp = alert.temperature
-        if (temp <= 37.5){
+        if (temp <= 37.5) {
             return "#3AF38D"
-        } else if (temp <= 38.5){
+        } else if (temp <= 38.5) {
             return "#F1FBA1"
-        } else if (temp <= 40){
+        } else if (temp <= 40) {
             return "#f3b238"
         } else {
             return "#FBA1A1"
         }
     }
- 
+
     const colors = theme === "light" ? lightColors : darkColors;
     return (
-                <ScrollView style={[styles.container, { backgroundColor: colors.background }]}>
-                <Text style={[styles.textHeader, { color: colors.text }]}>Historique des alertes</Text>
-                        <View style={[styles.alerts, {backgroundColor: colorAlerts(alert)}]}>
-                            <View style={styles.row}>
-                                <Text style={styles.value}>{list?.statut || 0}</Text>
-                                <Text style={styles.value}>{list?.temperature  || 0}°C</Text>
-                                <Text style={styles.value}>{list?.updatedAt || 0}</Text> 
- 
-                            </View>
-                        </View>
-                </ScrollView>
+        <ScrollView style={[styles.container, { backgroundColor: colors.background }]}>
+            <Text style={[styles.textHeader, { color: colors.text }]}>Historique des alertes</Text>
+            {data.map((alert, index) => (
+                <View key={index} style={[styles.alerts, { backgroundColor: colorAlerts(alert) }]}>
+                    <View style={styles.row}>
+                        <Text style={styles.value}>{alert?.statut || 0}</Text>
+                        <Text style={styles.value}>{alert?.temperature || 0}°C</Text>
+                        <Text style={styles.value}>{alert?.updatedAt || 0}</Text>
+
+                    </View>
+                </View>
+            ))}
+        </ScrollView>
     )
 }
- 
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -67,7 +68,7 @@ const styles = StyleSheet.create({
         fontSize: 30,
         fontWeight: "bold",
         marginBottom: 30,
-        textAlign:"center"
+        textAlign: "center"
     },
     textState: {
         padding: 20,
@@ -101,5 +102,5 @@ const styles = StyleSheet.create({
         fontWeight: "600",
         gap: 50,
     }
-   
+
 })

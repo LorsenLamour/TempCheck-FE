@@ -1,7 +1,13 @@
 import axios from "axios";
 
-const api = axios.create({
-    baseURL: `http://localhost:5000/api/temperature/`,
-    timeout: 5000,
-})
-export default api;
+const API_URL = `http://localhost:5000/api/temperature/`
+
+export const api = async () => {
+    try {
+        const response = await axios.get(API_URL);
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching data:", error);
+        throw error;
+    }
+};
