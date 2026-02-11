@@ -2,14 +2,36 @@ import { Text, StyleSheet, ScrollView, Dimensions } from "react-native";
 import { api } from "../../apiConfig";
 import { useState, useEffect } from "react";
 import { LineChart } from "react-native-chart-kit";
+
 export default function DashboardScreen() {
+    const screenWidth = Dimensions.get("window").width;
 
     const [data, setData] = useState([]);
+    const chartConfig = {
+        backgroundColor: "#000000",
+        backgroundGradientFrom: "#acc00",
+        backgroundGradientTo: "#000080",
+        color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
+        strokeWidth: 2,
+        barPercentage: 0.5,
+        useShadowColorFromDataset: false,
+        propsForDots: {
+            r: "5",
+            strokeWidth: "2",
+            stroke: "#ffa726"
+          },
+          propsForLabels: {
+            fontSize: 9,
+            fontWeight: 'bold',
+           // letterSpacing: 1,
+           // wordSpacing: 3,
+          }
+      };
+      
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-
                 const response = await api()
                 setData(response);
             } catch (error) {
@@ -22,7 +44,11 @@ export default function DashboardScreen() {
 
     const chartData = {
         labels: data.map(item =>
-            new Date(item.updatedAt).toLocaleDateString()
+            new Date(item.updatedAt).toLocaleDateString(`en-US`, {
+                weekday: `short`,
+                 hour: "numeric",
+                 hour12: true
+            })
         ),
         datasets: [
             {
@@ -37,19 +63,15 @@ export default function DashboardScreen() {
             <Text style={styles.sectionTitle}>Daily Stats</Text>
 
             <LineChart
-                data={chartData}
 
-                width={Dimensions.get("window").width - 30}
-                height={220}
-                chartConfig={{
-                    backgroundColor: "#fff",
-                    backgroundGradientFrom: "#fff",
-                    backgroundGradientTo: "#fff",
-                    color: () => "#4CAF50",
-                    labelColor: () => "#333",
-                }}
-                style={styles.chart}
+                data={chartData}
+                width={screenWidth}
+                height={290}
+                verticalLabelRotation={30}
+                chartConfig={chartConfig}
+
             />
+
         </ScrollView>
     );
 }
@@ -76,5 +98,6 @@ const styles = StyleSheet.create({
     },
     chart: {
         borderRadius: 12,
+        fontSize: 28
     },
 });

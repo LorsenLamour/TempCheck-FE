@@ -54,3 +54,5 @@ Join our community of developers creating universal apps.
 # Source:
 1. Datetime Format
 https://demo.mobiscroll.com/react/datetime/formatting-return-values
+
+https://www.npmjs.com/package/react-native-chart-kit
