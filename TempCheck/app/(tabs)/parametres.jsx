@@ -1,11 +1,12 @@
-import React, { useContext } from "react";
+import React, { use, useContext, useEffect, useState } from "react";
 import { View, Text, StyleSheet, Image, Switch, Alert, TouchableOpacity } from "react-native";
 import { CurrentUserContext } from "../../context/CurrentUserContext";
 import { ThemeContext } from "../../context/ThemeContext";
 import { router } from "expo-router";
 import { lightColors, darkColors } from "../../assets/colorPalette/colorsPalette"
-
-
+import axios from "axios";
+import api from "../../apiConfig";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Settings() {
   const { user } = useContext(CurrentUserContext);
@@ -13,10 +14,30 @@ export default function Settings() {
 
   const colors = theme === "light" ? lightColors : darkColors;
 
+  const [data, setData] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const token = await AsyncStorage.getItem("token");
+
+        const res = await axios.get("http://10.10.22.227:5000/api/users/me/", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setData(res.data);
+      } catch (error) {
+        console.error("Erreur lors de la récupération des données:", error);
+      }
+    }
+
+    fetchData();
+  }, []);
+
   const handleDeconnexion = () => {
     Alert.alert("Déconnexion", "Êtes-vous sûr de vouloir vous déconnecter ?", [
       { 
-        text: 'Confirmer',
         onPress: () => router.replace("/(auth)/connexion"),
         style: 'destructive'
       },
@@ -45,8 +66,7 @@ export default function Settings() {
           />
 
           <View style={styles.textContainer}>
-            <Text style={[styles.username, { color: colors.text }]}>{user?.username}</Text>
-            <Text style={[styles.role, { color: colors.text }]}>{user?.role}</Text>
+            <Text style={[styles.username, { color: colors.text }]}>{data? `${data.prenom}` : ""}</Text>
           </View>
 
           <View>

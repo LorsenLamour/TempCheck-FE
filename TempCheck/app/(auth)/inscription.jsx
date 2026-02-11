@@ -13,35 +13,57 @@ export default function Inscription() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
-    const [username, setUsername] = useState("");
+    const [prenom, setPrenom] = useState("");
+    const [nom, setNom] = useState("");
 
     const { user, setCurrentUser } = useContext(CurrentUserContext);
 
     const { theme } = useContext(ThemeContext);
     
     const colors = theme === "light" ? lightColors : darkColors;
-    
-     const handleSubmit = () => {
-            const userFound = TestData.push(
-                user => 
-                    user.email === email
-                );
 
-            if (userFound){
-                Alert.alert("Erreur d'inscription", "Cet email est déjà utilisé.")
-                return;
-            }
+    const handleSignUp = async () => {
+        if (!email || !password || !confirmPassword || !prenom || !nom) {
+            Alert.alert("Erreur d'inscription", "Veuillez remplir tous les champs.");
+            return;
+        }
 
-            const newUser = {
-                username,
-                email, 
-                password
+        if (password !== confirmPassword) {
+            Alert.alert("Erreur d'inscription", "Les mots de passe ne correspondent pas.");
+            return;
+        }
+
+        try {
+            const response = await fetch("http://10.10.22.227:5000/api/auth/register", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    nom, 
+                    prenom,
+                    email,
+                    password
+                })
+            });
+
+            const data = await response.json();
+            console.log("REGISTER DATA:", data);
+
+            if (response.ok) {
+                Alert.alert("Inscription réussie", "Vous pouvez maintenant vous connecter.");
+                router.push("/(auth)/connexion");
             }
-            
-            TestData.push(newUser)
-            setCurrentUser(newUser);
-            router.replace("/questionnaires_screen");
+            else {
+                Alert.alert("Erreur d'inscription", data.message || "Une erreur est survenue lors de l'inscription.");
+            }
+        } catch (error) {
+            console.error("Error during registration:", error);
+            Alert.alert("Erreur d'inscription", "Une erreur est survenue lors de l'inscription.");
+        }
     }
+    
+    
         return(
             <SafeAreaView style={{ flex: 1, backgroundColor: colors.tabNav }}>
                 <View style={[styles.container, { backgroundColor: colors.background }]}>
@@ -53,9 +75,16 @@ export default function Inscription() {
                         <Text style={{ color: colors.text }}>Nom d'utilisateur</Text>
                         <TextInput
                             style={styles.input}
-                            value={username}
-                            onChangeText={setUsername}
+                            value={nom}
+                            onChangeText={setNom}
                             placeholder="Entrez votre nom d'utilisateur"
+                        />
+                        <Text style={{ color: colors.text }}>Prénom</Text>
+                        <TextInput
+                            style={styles.input}
+                            value={prenom}
+                            onChangeText={setPrenom}
+                            placeholder="Entrez votre prénom"
                         />
                         <Text style={{ color: colors.text }}>Email</Text>
                         <TextInput
@@ -80,7 +109,7 @@ export default function Inscription() {
                             placeholder="Confirmez votre mot de passe"
                             secureTextEntry
                         />
-                        <TouchableOpacity onPress={handleSubmit} style={[styles.button, { backgroundColor: colors.authButton }]}>
+                        <TouchableOpacity onPress={handleSignUp} style={[styles.button, { backgroundColor: colors.authButton }]}>
                             <Text style={{ color: colors.text }}>S'inscrire</Text>
                         </TouchableOpacity>
                         <Text style={styles.text}>Vous avez déjà un compte ? {" "}
