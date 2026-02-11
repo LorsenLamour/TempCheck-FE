@@ -7,6 +7,7 @@ import TestData from "../../data/testUser.json";
 import { ThemeContext } from "../../context/ThemeContext";
 import { lightColors, darkColors } from "../../assets/colorPalette/colorsPalette"
 import { SafeAreaView } from "react-native-safe-area-context";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
 export default function Connexion() {
@@ -15,26 +16,58 @@ export default function Connexion() {
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
 
     const { theme } = useContext(ThemeContext);
     
     const colors = theme === "light" ? lightColors : darkColors;
 
-
-        const handleSubmit = () => {
-            const foundUser = TestData.find(user => user.email === email && user.password === password);
-
-            if (!foundUser) {
-                Alert.alert("Erreur de connexion", "Email ou mot de passe incorrect.");
-                return;
-            }
-            
-            setCurrentUser(foundUser);
-            router.replace("/questionnaires_screen");
+    const handleLogin = async () => {
+        if (!email || !password) {
+            Alert.alert("Erreur de connexion", "Veuillez remplir tous les champs.");
+            return;
         }
-        /**
-         * Plus tard : Mettre en place une vraie connexion avec backend
-         */
+
+        setIsLoading(true);
+
+        try {
+            // Récupérer les utilisateurs depuis le backend
+            const response = await fetch("http://10.10.22.227:5000/api/auth/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    email,
+                    password
+                })
+            });
+
+            const data = await response.json();
+            console.log("LOGIN DATA:", data);
+
+            if (response.ok) {
+                if (!data.token || !data.user) {
+                    Alert.alert("Erreur de connexion", "Données de connexion manquantes.");
+                    return;
+                }
+
+                await AsyncStorage.setItem("token", data.token);
+                await AsyncStorage.setItem("user", JSON.stringify(data.user));
+
+                setCurrentUser(data.user);
+                router.replace("/questionnaires_screen");
+            } else {
+                Alert.alert("Erreur de connexion", data.message || "Une erreur est survenue.");
+            }
+        } catch (error) {
+            Alert.alert("Erreur de connexion", "Une erreur est survenue.");
+            console.log("LOGIN ERROR:", error);
+        } finally {
+            setIsLoading(false);
+        }
+    }
+
     return(
         <SafeAreaView style={{ flex: 1, backgroundColor: colors.tabNav }}>
             <View style={[styles.container, { backgroundColor: colors.background }]}>
@@ -58,7 +91,7 @@ export default function Connexion() {
                         placeholder="Entrez votre mot de passe"
                         secureTextEntry
                     />
-                    <TouchableOpacity onPress={handleSubmit} style={[styles.button, { backgroundColor: colors.authButton }]}>
+                    <TouchableOpacity onPress={handleLogin} style={[styles.button, { backgroundColor: colors.authButton }]}>
                         <Text style={{ color: colors.text }}>Se connecter</Text>
                     </TouchableOpacity>
                     <Text style={[styles.text, { color: colors.text }]}>Vous n'avez pas de compte ? {" "}
