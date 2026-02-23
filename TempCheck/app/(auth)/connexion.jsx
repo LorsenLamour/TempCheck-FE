@@ -8,6 +8,7 @@ import { ThemeContext } from "../../context/ThemeContext";
 import { lightColors, darkColors } from "../../assets/colorPalette/colorsPalette"
 import { SafeAreaView } from "react-native-safe-area-context";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import api from "../../apiConfig";
 
 
 export default function Connexion() {
@@ -32,37 +33,30 @@ export default function Connexion() {
 
         try {
             // Récupérer les utilisateurs depuis le backend
-            const response = await fetch("http://10.10.22.227:5000/api/auth/login", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    email,
-                    password
-                })
+            const response = await api.post(`/auth/login`, {
+                email: email,
+                password: password
             });
-
-            const data = await response.json();
+                
+            const data = await response.data;
             console.log("LOGIN DATA:", data);
 
-            if (response.ok) {
-                if (!data.token || !data.user) {
-                    Alert.alert("Erreur de connexion", "Données de connexion manquantes.");
-                    return;
-                }
-
-                await AsyncStorage.setItem("token", data.token);
-                await AsyncStorage.setItem("user", JSON.stringify(data.user));
-
-                setCurrentUser(data.user);
-                router.replace("/questionnaires_screen");
-            } else {
-                Alert.alert("Erreur de connexion", data.message || "Une erreur est survenue.");
+          
+            if (!data.token || !data.user) {
+                Alert.alert("Erreur de connexion", "Données de connexion manquantes.");
+                return;
             }
+
+            await AsyncStorage.setItem("token", data.token);
+            await AsyncStorage.setItem("user", JSON.stringify(data.user));
+
+            setCurrentUser(data.user);
+            router.replace("/questionnaires_screen");
+            
         } catch (error) {
-            Alert.alert("Erreur de connexion", "Une erreur est survenue.");
-            console.log("LOGIN ERROR:", error);
+            console.log("LOGIN ERROR:", error.response?.data || error.message);
+            Alert.alert("Erreur de connexion", error.response?.data?.message || "Une erreur est survenue."
+            );
         } finally {
             setIsLoading(false);
         }
