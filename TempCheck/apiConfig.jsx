@@ -1,14 +1,21 @@
 import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const API_URL = `http://localhost:5000/api/temperature/`
-const API_URL_mobile = `http://10.10.22.227:5000/api/temperature/`
+// const BASE_URL = "http://10.10.22.227:5000/api";
+// const BASE_URL = "http://localhost:5000/api";
+const BASE_URL = "http://10.49.43.118:5000/api";
 
-export const api = async () => {
-    try {
-        const response = await axios.get(API_URL_mobile);
-        return response.data;
-    } catch (error) {
-        console.error("Error fetching data:", error);
-        throw error;
+const api = axios.create({
+    baseURL: BASE_URL,
+});
+
+api.interceptors.request.use(async (config) => {
+    const token = await AsyncStorage.getItem("token");
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
     }
-};
+    return config;
+})
+
+export default api;
+

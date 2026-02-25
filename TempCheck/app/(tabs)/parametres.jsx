@@ -1,15 +1,14 @@
-import React, { use, useContext, useEffect, useState } from "react";
-import { View, Text, StyleSheet, Image, Switch, Alert, TouchableOpacity } from "react-native";
+import React, { useContext, useEffect, useState } from "react";
+import { View, Text, StyleSheet, Image, Switch, Alert } from "react-native";
 import { CurrentUserContext } from "../../context/CurrentUserContext";
 import { ThemeContext } from "../../context/ThemeContext";
 import { router } from "expo-router";
 import { lightColors, darkColors } from "../../assets/colorPalette/colorsPalette"
-import axios from "axios";
 import api from "../../apiConfig";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Settings() {
-  const { user } = useContext(CurrentUserContext);
+  const { user, setCurrentUser } = useContext(CurrentUserContext);
   const { theme, toggleTheme } = useContext(ThemeContext);
 
   const colors = theme === "light" ? lightColors : darkColors;
@@ -21,7 +20,7 @@ export default function Settings() {
       try {
         const token = await AsyncStorage.getItem("token");
 
-        const res = await axios.get("http://10.10.22.227:5000/api/users/me/", {
+        const res = await api.get(`/users/me/`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -38,22 +37,53 @@ export default function Settings() {
   const handleDeconnexion = () => {
     Alert.alert("Déconnexion", "Êtes-vous sûr de vouloir vous déconnecter ?", [
       { 
-        onPress: () => router.replace("/(auth)/connexion"),
-        style: 'destructive'
+        text: 'Se déconnecter',
+        style: 'destructive',
+        onPress: async () => {
+          await AsyncStorage.removeItem("token");
+          await AsyncStorage.removeItem("user");
+          setCurrentUser(null);
+          router.replace("/(auth)/connexion");
+        },
       },
-      { text: 'Annuler', style: 'cancel', onPress: () => console.log("Déconnexion annulée") }
+      { text: 'Annuler', style: 'cancel'}
     ]);
   }
 
   // Fonction temporaire pour la suppression de compte
   const handleDeleteAccount = () => {
+
+    if (!user?._id) {
+      Alert.alert("Erreur", "Aucun utilisateur connecté.");
+      return;
+    }
+    
     Alert.alert("Supprimer le compte", "Cette action est irréversible. Voulez-vous continuer ?", [
       { 
         text: 'Supprimer',
-        onPress: () => console.log("Compte supprimé"),
-        style: 'destructive'
+        style: 'destructive',
+        onPress: async () => {
+          try {
+            const token = await AsyncStorage.getItem("token");
+
+            await api.delete(`/users/deleteUser/${user._id}`, {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            });
+            await AsyncStorage.removeItem("token");
+            await AsyncStorage.removeItem("user");
+
+            setCurrentUser(null);
+
+            router.replace("/(auth)/connexion");
+          } catch (error) {
+            console.error("Erreur lors de la suppression du compte:", error);
+            Alert.alert("Erreur", "Une erreur est survenue lors de la suppression du compte. Veuillez réessayer.");
+          }
+        },
       },
-      { text: 'Annuler', style: 'cancel', onPress: () => console.log("Suppression annulée") }
+      { text: 'Annuler', style: 'cancel'}
     ]);
   }
 
@@ -67,12 +97,6 @@ export default function Settings() {
 
           <View style={styles.textContainer}>
             <Text style={[styles.username, { color: colors.text }]}>{data? `${data.prenom}` : ""}</Text>
-          </View>
-
-          <View>
-            <TouchableOpacity>
-              <Text style={[ styles.title, { color: colors.text, backgroundColor: "#a3c4d7", padding: 20, borderRadius: 25}]}>Modifier le profil</Text>
-            </TouchableOpacity>
           </View>
         </View>
 

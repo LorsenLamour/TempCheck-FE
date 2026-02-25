@@ -3,7 +3,7 @@ import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { darkColors, lightColors } from "../../assets/colorPalette/colorsPalette";
 import { CurrentUserContext } from "../../context/CurrentUserContext";
 import { ThemeContext } from "../../context/ThemeContext";
-import { api } from "../../apiConfig";
+import api  from "../../apiConfig";
 //import list from "../../data/listHistoric.json";
 //import TemperatureList from"../../context/alertService"
 
@@ -15,8 +15,8 @@ export default function Historique() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await api();
-                setData(response);
+                const response = await api.get(`/temperature/`);
+                setData(response.data);
             } catch (error) {
                 console.error(error);
             }

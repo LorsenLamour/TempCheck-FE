@@ -1,5 +1,5 @@
 import { Text, StyleSheet, ScrollView, Dimensions } from "react-native";
-import { api } from "../../apiConfig";
+import api from "../../apiConfig";
 import { useState, useEffect } from "react";
 import { LineChart } from "react-native-chart-kit";
 
@@ -32,8 +32,8 @@ export default function DashboardScreen() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await api()
-                setData(response);
+                const response = await api.get(`/temperature/`);
+                setData(response.data);
             } catch (error) {
                 console.error("Error fetching data:", error);
             }

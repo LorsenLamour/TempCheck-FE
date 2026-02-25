@@ -5,6 +5,7 @@ import { lightColors, darkColors } from "../assets/colorPalette/colorsPalette"
 import { router } from "expo-router";
 import { CurrentUserContext } from "../context/CurrentUserContext";
 import axios from "axios";
+import api from "../apiConfig";
 
 
 export default function Questionnaires() {
@@ -51,8 +52,8 @@ export default function Questionnaires() {
                         question3: finalForm.question3,
 
                     }
-                    const response = await axios.post(
-                        "http://10.10.22.227:5000/api/temperature",
+                    const response = await api.post(
+                        "/temperature",
                         datas
                     );
                     console.log("Données envoyées", response.data);

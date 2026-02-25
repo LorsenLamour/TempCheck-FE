@@ -1,6 +1,6 @@
 import { LinearGradient } from "expo-linear-gradient";
 import { useEffect, useState, useContext } from "react";
-import { StyleSheet, Text, View, Modal, Alert } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import { ThemeContext } from "../../context/ThemeContext";
 import { lightColors, darkColors } from "../../assets/colorPalette/colorsPalette"
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -16,7 +16,7 @@ export default function Home() {
 
     useEffect(() => {
 
-        axios.get(`http://localhost:5000/api/temperature/`).then(response => {
+        api.get(`/temperature/`).then(response => {
             console.log("Données reçues:", response.data);
             setData(response.data);
         }).catch(error => {
