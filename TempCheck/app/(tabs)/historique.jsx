@@ -3,44 +3,48 @@ import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { darkColors, lightColors } from "../../assets/colorPalette/colorsPalette";
 import { CurrentUserContext } from "../../context/CurrentUserContext";
 import { ThemeContext } from "../../context/ThemeContext";
-import api  from "../../apiConfig";
+import api from "../../apiConfig";
 //import list from "../../data/listHistoric.json";
 //import TemperatureList from"../../context/alertService"
+import { useFocusEffect } from '@react-navigation/native';
+import { useCallback } from 'react';
 
 export default function Historique() {
     const [data, setData] = useState([]);
     const { theme } = useContext(ThemeContext);
     const { user } = useContext(CurrentUserContext);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await api.get(`/temperature/`);
-                setData(response.data);
-            } catch (error) {
-                console.error(error);
-            }
-        };
-        fetchData();
-    }, []);
+    useFocusEffect(
+        useCallback(() => {
+            const fetchData = async () => {
+                try {
+                    const response = await api.get('/temperature');
+                    setData(response.data);
+                } catch (error) {
+                    console.error(error);
+                }
+            };
+            fetchData();
+        }, [])
+    );
 
     // const list = data
     // Condition couleur type
 
     const colorAlerts = (data) => {
-        const temp = data?.temperature
-        if (temp <= 37.5) {
+        const statut = data?.statut
+        if (statut === "Neutre") {
             // Vert
             return "#3AF38D"
-        } else if (temp <= 38.5) {
+        } else if (statut === "À surveiller") {
             //Jaune
             return "#F1FBA1"
-        } else if (temp <= 40) {
+        } else if (statut === "Urgent") {
             // Orange
-            return "#f3b238"
+            return "#ff0000"
         } else {
             //
-            return "#FF0000"
+            return "#247e59"
         }
     }
 
@@ -48,7 +52,7 @@ export default function Historique() {
     return (
         <ScrollView style={[styles.container, { backgroundColor: colors.background }]}>
             <Text style={[styles.textHeader, { color: colors.text }]}>Historique des alertes</Text>
-            {data.map((alert, index) => (
+            {data.slice().reverse().map((alert, index) => (
                 <View key={index} style={[styles.alerts, { backgroundColor: colorAlerts(alert) }]}>
                     <View style={styles.row}>
                         <Text style={styles.value}>{alert?.statut || 0}</Text>

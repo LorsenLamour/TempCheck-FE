@@ -1,7 +1,8 @@
 import { Text, StyleSheet, ScrollView, Dimensions } from "react-native";
 import api from "../../apiConfig";
-import { useState, useEffect } from "react";
+import { useState, useCallback } from "react";
 import { LineChart } from "react-native-chart-kit";
+import { useFocusEffect } from "@react-navigation/native";
 
 export default function DashboardScreen() {
     const screenWidth = Dimensions.get("window").width;
@@ -9,7 +10,7 @@ export default function DashboardScreen() {
     const [data, setData] = useState([]);
     const chartConfig = {
         backgroundColor: "#000000",
-        backgroundGradientFrom: "#acc00",
+        backgroundGradientFrom: "#000000",
         backgroundGradientTo: "#000080",
         color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
         strokeWidth: 2,
@@ -29,23 +30,33 @@ export default function DashboardScreen() {
       };
       
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await api.get(`/temperature/`);
-                setData(response.data);
-            } catch (error) {
+    useFocusEffect(
+        useCallback(() => {
+            const fetchData = async () => {
+                try {
+                    const response = await api.get(`/temperature/`);
+                    setData(response.data);
+                } catch (error) {
                 console.error("Error fetching data:", error);
             }
         };
 
         fetchData();
-    }, []);
+    }, []));
+
+    if (data.length === 0) {
+        return (
+            <ScrollView style={styles.container}>
+                <Text style={styles.title}>Dashboard</Text>
+                <Text style={styles.noData}>Aucune donnée disponible</Text>
+            </ScrollView>
+        );
+    }
 
     const chartData = {
         labels: data.map(item =>
-            new Date(item.updatedAt).toLocaleDateString(`en-US`, {
-                weekday: `short`,
+            new Date(item.updatedAt).toLocaleDateString('en-US', {
+                weekday: 'short',
                  hour: "numeric",
                  hour12: true
             })
@@ -99,5 +110,11 @@ const styles = StyleSheet.create({
     chart: {
         borderRadius: 12,
         fontSize: 28
+    },
+    noData: {  
+        textAlign: "center",
+        marginTop: 50,
+        fontSize: 16,
+        color: "#888",
     },
 });

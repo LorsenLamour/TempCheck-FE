@@ -51,7 +51,7 @@ export default function Connexion() {
             await AsyncStorage.setItem("user", JSON.stringify(data.user));
 
             setCurrentUser(data.user);
-            router.replace("/questionnaires_screen");
+            router.replace("/(tabs)");
             
         } catch (error) {
             console.log("LOGIN ERROR:", error.response?.data || error.message);
@@ -88,7 +88,7 @@ export default function Connexion() {
                     <TouchableOpacity onPress={handleLogin} style={[styles.button, { backgroundColor: colors.authButton }]}>
                         <Text style={{ color: colors.text }}>Se connecter</Text>
                     </TouchableOpacity>
-                    <Text style={[styles.text, { color: colors.text }]}>Vous n'avez pas de compte ? {" "}
+                    <Text style={[styles.text, { color: colors.text }]}>Vous navez pas de compte ? {" "}
                         <Text style={styles.link} onPress={() => router.push("/(auth)/inscription")}>
                             Inscrivez-vous
                         </Text>
